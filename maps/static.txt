@@ -1,0 +1,19 @@
+---boundary---
+boundary -2.0 10.0 -5.0 10.0
+mode absolute
+formation none
+deltaT 0.01
+phase 1
+
+polygonBlock 1.0 5.0 1.0 1.0
+polygonBlock 3.0 5.0 1.0 1.0
+polygonBlock 5.0 5.0 1.0 1.0
+polygonBlock 5.0 3.0 1.0 1.0
+polygonBlock 5.0 1.0 1.0 1.0
+polygonBlock 5.0 -1.0 1.0 1.0
+polygonBlock 5.0 -3.0 1.0 1.0
+polygonBlock 3.0 -3.0 1.0 1.0
+
+---Agent posx posy velx vely radius goalx goaly---
+agent 2.0 2.0 1.0 1.0 0.5 
+goal 8.0 2.0

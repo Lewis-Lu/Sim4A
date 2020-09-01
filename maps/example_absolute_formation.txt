@@ -1,0 +1,40 @@
+>>>DO NOT EDIT PROMPT AND UPCASE WORDS
+
+>>>ENV CONFIGURATION
+boundary -10.0 10.0 -10.0 10.0
+deltaT 0.01
+formation displacement
+
+circleBlock 0.0 0.0 0.0 0.0 1.0
+
+>>>AGENT CONFIGURATION
+> WHEN YOU WANT TO RANDOMLY GENERATE AGENTS 
+    KEYWORD 'mode random' AND 'quantity' ARE MADONTARY
+> WHEN YOU WANT TO ARBITRARY GENERATE AGENTS
+    KEYWORD 'mode absolute' IS MANDONTARY
+
+mode absolute
+
+agent -10.0 -6.0 0.0 0.0 1
+agent -10.0  6.0 0.0 0.0 1
+
+goal 10.0   6.0
+
+
+>>>FORMATION CONFIGURATION
+
+phase
+adjacantMatrix
+0 1 1 0 0 0 0 0 0
+1 0 0 0 0 0 1 0 0
+1 0 0 1 0 0 0 0 0
+0 0 1 0 1 0 0 0 0
+0 0 0 1 0 1 0 0 0
+0 0 0 0 1 0 0 0 0
+0 1 0 0 0 0 0 1 0
+0 0 0 0 0 0 1 0 1
+0 0 0 0 0 0 0 1 0
+
+displacementMatrix
+-3.0 0.0
+3.0 0.0

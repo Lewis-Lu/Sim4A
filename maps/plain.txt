@@ -1,0 +1,11 @@
+%plain 
+
+boundary -5 5 -5 5
+
+formation none
+
+agent -2.5 0.0 0.0 0.0 0.5
+agent  2.5 0.0 0.0 0.0 0.5
+
+goal  2.5 0.0 
+goal -2.5 0.0

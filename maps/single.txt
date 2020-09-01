@@ -1,0 +1,15 @@
+---boundary---
+boundary -20 20 -10 10
+
+---CircleBlock posx posy velx vely radius---
+circleBlock -5.0  0.0  0.0 0.0 2
+circleBlock 5.0  0.0   0.0 0.0 2
+circleBlock 0.0  -5.0  0.0 0.0 2
+circleBlock 0.0  5.0   0.0 0.0 2
+
+---PolygonBlock posx posy width/2 height/2---
+
+---Agent posx posy velx vely radius goalx goaly---
+
+% 16-agent formation
+agent -15.0 0.0 0.0 0.0 0.5 10.0 0.0

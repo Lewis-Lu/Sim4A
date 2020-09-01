@@ -1,0 +1,36 @@
+boundary -30.0 30.0 -15.0 15.0
+deltaT 0.01
+
+circleBlock -12.0  0.0 0.0 0.0 1
+
+formation displacement
+mode absolute
+
+agent -20.0  0.0 0.0 0.0 1
+agent -20.0  3.0 0.0 0.0 1
+agent -20.0  6.0 0.0 0.0 1
+agent -20.0 -3.0 0.0 0.0 1
+agent -20.0 -6.0 0.0 0.0 1
+
+goal 0.0  0.0
+ngoal -2   2
+ngoal 2 2
+ngoal 2 -2
+ngoal -2 -2
+
+phase 1
+adjacantMatrix
+0 1 1 1 1
+1 0 0 0 0 
+1 0 0 0 0 
+1 0 0 0 0
+1 0 0 0 0 
+
+
+displacementMatrix
+-2	 2	2	2	2	-2	-2	-2
+ 2	-2	0	0	0	0	0	0
+-2	-2  0	0	0	0	0	0
+-2	 2	0   0   0	0	0	0
+ 2	 2	0	0	0	0	0	0
+

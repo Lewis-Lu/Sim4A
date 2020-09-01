@@ -1,0 +1,47 @@
+---boundary---
+boundary -20.0 20.0 -20.0 20.0
+mode absolute
+formation none
+deltaT 0.01
+phase 1
+
+
+agent 0.0  0.0 0.0 0.0 1
+agent 4.0  0.0 0.0 0.0 1 
+agent 8.0  0.0 0.0 0.0 1  
+agent -4.0 0.0 0.0 0.0 1 
+agent -8.0 0.0 0.0 0.0 1
+
+agent 0.0  4.0 0.0 0.0 1
+agent 4.0  4.0 0.0 0.0 1 
+agent 8.0  4.0 0.0 0.0 1 
+agent -4.0 4.0 0.0 0.0 1 
+agent -8.0 4.0 0.0 0.0 1
+
+agent 0.0  -4.0 0.0 0.0 1
+agent 4.0  -4.0 0.0 0.0 1 
+agent 8.0  -4.0 0.0 0.0 1 
+agent -4.0 -4.0 0.0 0.0 1 
+agent -8.0 -4.0 0.0 0.0 1
+
+agent -6.0 -7.0 0.0 0.0 1
+
+goal 0.0 0.0
+goal 4.0 0.0
+goal 8.0 0.0
+goal -4.0 0.0
+goal -8.0 0.0
+
+goal 0.0 4.0
+goal 4.0 4.0
+goal 8.0 4.0
+goal -4.0 4.0
+goal -8.0 4.0
+
+goal 0.0 -4.0
+goal 4.0 -4.0
+goal 8.0 -4.0
+goal -4.0 -4.0
+goal -8.0 -4.0
+
+goal 8.0 7.0

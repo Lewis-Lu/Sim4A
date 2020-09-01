@@ -1,0 +1,940 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Agent</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-08-05"><meta name="DC.source" content="Agent.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">class definition file for 'Agent'</a></li><li><a href="#2">PROPERTIES</a></li><li><a href="#3">CONSTRUTOR (IN LIST CONSTRUCTOR WAY)</a></li><li><a href="#5">for different phase purpose</a></li><li><a href="#7">API FUNCTIONS</a></li><li><a href="#8">find neighbours for the agent</a></li><li><a href="#9">get all velocity obstacles</a></li><li><a href="#11">get optimal velocity for the agent</a></li><li><a href="#13">PRIVATE METHODS</a></li><li><a href="#15">prefVel</a></li><li><a href="#18">collision cone vertex calculation</a></li><li><a href="#19">velMap</a></li><li><a href="#20">vo calculation</a></li><li><a href="#22">PLOTTING METHODS</a></li><li><a href="#24">display function</a></li></ul></div><h2 id="1">class definition file for 'Agent'</h2><p>Written by Lu, Hong <a href="mailto:luhong@westlake.edu.cn">luhong@westlake.edu.cn</a></p><pre class="codeinput"><span class="keyword">classdef</span> Agent
+</pre><h2 id="2">PROPERTIES</h2><pre class="codeinput">    properties
+        position
+        velocity            = [0 0]
+        acceleration        = [0 0]
+        radius
+        goal
+        id
+        deltaT
+        maxSpeed            = 10
+        measurementRadius   = 10
+        distanceToReachGoal = 0.5 <span class="comment">% it might be a bug to be fix. Need to be patient when near the goal</span>
+        speedProtectedRatio = 1
+        protectZone         = 0.01
+        RVO_alpha           = 0.5
+        dist_epsilon        = 0.1
+        dist_signal         = 5
+
+        <span class="comment">% coefficiency for truncated VO; the larger the less truncated</span>
+        <span class="comment">% space, tau must &gt; 1</span>
+        tau                 = 2
+        type                = <span class="string">'agent'</span>
+        neighbour
+    <span class="keyword">end</span>
+</pre><h2 id="3">CONSTRUTOR (IN LIST CONSTRUCTOR WAY)</h2><p>construction function</p><pre class="codeinput">    methods(Access=public)
+</pre><pre class="codeinput">        <span class="keyword">function</span> obj = Agent(varargin)
+            obj.position    = varargin{1};
+            obj.velocity    = varargin{2};
+            obj.radius      = varargin{3};
+            obj.id          = varargin{4};
+            obj.deltaT      = varargin{5};
+            fprintf(<span class="string">"[INFO]\t GENERATING NO.%d AGENT\n"</span>, obj.id);
+        <span class="keyword">end</span>
+</pre><pre class="codeoutput error">&#32034;&#24341;&#36229;&#20986;&#25968;&#32452;&#20803;&#32032;&#30340;&#25968;&#30446;(0)&#12290;
+
+&#20986;&#38169; Agent (line 38)
+            obj.position    = varargin{1};
+</pre><h2 id="5">for different phase purpose</h2><pre class="codeinput">        <span class="keyword">function</span> obj = SetGoal(obj, goal)
+            obj.goal = goal;
+        <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><h2 id="7">API FUNCTIONS</h2><pre class="codeinput">    methods
+</pre><h2 id="8">find neighbours for the agent</h2><pre class="codeinput">        <span class="keyword">function</span> [neighbour, s, minDist] = calNN(obj, config)
+            minDist = intmax;
+            s = 0;
+            <span class="keyword">for</span> i = 1:length(config.objType)
+                objType = config.objType{i};
+                buffer.(objType)  = [];
+                <span class="keyword">if</span> isfield(config, objType) == true
+                    listObj = config.(objType);
+                    <span class="keyword">for</span> j = 1:length(listObj)
+                        dist = norm(obj.position - listObj(j).position);
+                        <span class="keyword">if</span> dist &lt; minDist &amp;&amp; dist ~= 0
+                            minDist = dist;
+                        <span class="keyword">end</span>
+                        <span class="keyword">if</span> dist &gt; obj.measurementRadius || dist == 0
+                            <span class="keyword">continue</span>
+                        <span class="keyword">end</span>
+                        buffer.(objType) = [buffer.(objType) listObj(j)];
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+                neighbour.(objType) = buffer.(objType);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+<span class="comment">%         function [neighbour, s, minDist] = calNeighbourUsingKdtree(obj, config)</span>
+<span class="comment">%</span>
+<span class="comment">%         end</span>
+</pre><h2 id="9">get all velocity obstacles</h2><pre class="codeinput">        <span class="keyword">function</span> allVO = calVO(obj, nnp, patMethod, nno, obsMethod, nnpoly, polyMethod)
+            <span class="comment">% calculate velocity obstacle for every agent</span>
+            <span class="comment">% we did not use nargin method to deal with default inputs</span>
+
+            allVO = [];
+            <span class="keyword">if</span> ~isempty(nnp)
+                <span class="keyword">for</span> i = 1:size(nnp,2)
+                    allVO = [allVO obj.helperCalVelocityObstacle(nnp(i), patMethod)];
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> ~isempty(nno)
+                <span class="keyword">for</span> i = 1:size(nno,2)
+                    allVO = [allVO obj.helperCalVelocityObstacle(nno(i), obsMethod)];
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> ~isempty(nnpoly)
+                <span class="keyword">for</span> i = 1:size(nnpoly,2)
+                    allVO = [allVO obj.helperCalVelocityObstacle(nnpoly(i), polyMethod)];
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+</pre><pre class="codeinput">        <span class="keyword">function</span> flag = isReachGoal(obj)
+            <span class="keyword">persistent</span> print
+            print = false;
+            <span class="keyword">if</span> sum((obj.position - obj.goal).^2) &lt; obj.distanceToReachGoal^2
+                flag = true;
+                <span class="keyword">if</span> ~print, fprintf(<span class="string">"[INFO]\t AGENT %d REACHED GOAL\n"</span>, obj.id); <span class="keyword">end</span>
+                print = true;
+            <span class="keyword">else</span>
+                flag = false;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> obj = update(obj, optVelocity)
+            <span class="comment">% update States for agent</span>
+            <span class="comment">% position, acceleration, velocity in deltaT</span>
+            obj.position = obj.position + optVelocity*obj.deltaT;
+            obj.acceleration = optVelocity - obj.velocity;
+            obj.velocity = optVelocity;
+        <span class="keyword">end</span>
+</pre><h2 id="11">get optimal velocity for the agent</h2><pre class="codeinput">        <span class="keyword">function</span> [optimalVelocity, prefVelocity]= calOptVel(obj, vo, CONFIG, phase)
+            <span class="keyword">global</span> SHOW_SINGLE_AGENT_VO
+            <span class="keyword">global</span> SHOW_SINGLE_AGENT_VP
+            <span class="keyword">global</span> SHOW_ALL_AGENT_VELOCITY
+            <span class="keyword">global</span> PlotWhileSim
+            <span class="keyword">global</span> SELECTED_IDX
+
+            optimalVelocity = zeros(1,2);
+
+            <span class="keyword">if</span> obj.isReachGoal()
+                <span class="keyword">if</span> ~isempty(vo), fprintf(<span class="string">"AGENT %d REACHED GOAL, BUT STILL GOT VO\n"</span>, obj.id); <span class="keyword">end</span>
+                <span class="comment">% -----------------------------</span>
+                <span class="comment">% need to be dynamic, TODO</span>
+                <span class="comment">% -----------------------------</span>
+            <span class="keyword">elseif</span> ~isreal(vo)
+                optimalVelocity = obj.helperCalDeadlockVelocity();
+            <span class="keyword">else</span>
+                vel_epsilon_filter = 0.1;
+                prefVelocity = obj.helperCalPrefVelocity(CONFIG, phase);
+                velocityMap = obj.helperCalVelocityMap();
+                voCount = size(vo,2)/2;
+                <span class="comment">% using polyshape() to do geometry calculation</span>
+                velocityMapPgon = polyshape(velocityMap);
+                <span class="keyword">for</span> i = 1:voCount
+                    vo_idx = 2*(i-1) + 1;
+                    voPgon = polyshape(vo(:, vo_idx:vo_idx+1));
+                    velocityMapPgon = subtract(velocityMapPgon, voPgon);
+                    <span class="keyword">if</span> SHOW_SINGLE_AGENT_VO == true &amp;&amp; obj.id == SELECTED_IDX &amp;&amp; PlotWhileSim == true
+                        voPgon4show = polyshape(obj.position + vo(:, vo_idx:vo_idx+1));
+                        plot(voPgon4show,<span class="keyword">...</span>
+                            <span class="string">'FaceColor'</span>, <span class="string">'blue'</span>,<span class="keyword">...</span>
+                            <span class="string">'FaceAlpha'</span>, 0.1,<span class="keyword">...</span>
+                            <span class="string">'EdgeColor'</span>, <span class="string">'none'</span>);
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+                <span class="comment">% select reachable velocity</span>
+                reachableVelocityMap = velocityMapPgon.Vertices;
+                <span class="comment">% plot reachable velocity map for visualizations</span>
+                <span class="keyword">if</span> SHOW_SINGLE_AGENT_VP == true &amp;&amp; obj.id == SELECTED_IDX &amp;&amp; PlotWhileSim == true
+                    plot(polyshape(reachableVelocityMap + obj.position), <span class="keyword">...</span>
+                            <span class="string">'FaceColor'</span>, <span class="string">'blue'</span>,<span class="keyword">...</span>
+                            <span class="string">'FaceAlpha'</span>, 0.1);
+                <span class="keyword">end</span>
+                <span class="comment">% argmin |Vi - Vpref|_2</span>
+                n_reachableVelocity = size(reachableVelocityMap, 1);
+                dist_min = intmax;
+                <span class="keyword">if</span> n_reachableVelocity ~= 0
+                    <span class="keyword">for</span> i = 1:n_reachableVelocity
+                       candidate = reachableVelocityMap(i,:);
+                       <span class="keyword">if</span> norm(candidate) &lt; vel_epsilon_filter*obj.maxSpeed
+                           <span class="keyword">continue</span>
+                       <span class="keyword">end</span>
+                       <span class="keyword">if</span> norm(candidate-prefVelocity) &lt; dist_min
+                           dist_min = norm(candidate-prefVelocity);
+                           optimalVelocity = candidate;
+                       <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+                <span class="comment">% add perturbation to break symmetry</span>
+                angle = rand*2.0*pi;
+                dist =  rand*0.05;
+                optimalVelocity = optimalVelocity + dist*[cos(angle), sin(angle)];
+                <span class="comment">% plot while simulation</span>
+                <span class="keyword">if</span> SHOW_ALL_AGENT_VELOCITY == true &amp;&amp; PlotWhileSim == true
+                    nxtpos = obj.position + optimalVelocity;
+                    plot([nxtpos(1), obj.position(1)],<span class="keyword">...</span>
+                        [nxtpos(2), obj.position(2)],<span class="keyword">...</span>
+                        <span class="string">'b-'</span>);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><h2 id="13">PRIVATE METHODS</h2><pre class="codeinput">    methods(Access = private)
+</pre><pre class="codeinput"><span class="comment">%   &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;   PRIVATE HELPER FUNCTIONS   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span>
+</pre><h2 id="15">prefVel</h2><pre class="codeinput">    <span class="keyword">function</span> prefVelocity = helperCalPrefVelocity(obj, CONFIG, phase)
+        <span class="comment">%helperCalPrefVelocity - calculate preferrenced velocity in</span>
+        <span class="comment">%goal-oriented</span>
+        <span class="comment">% &amp;</span>
+        <span class="comment">%consensus-based formation in 3 types</span>
+        <span class="comment">%  position-based,</span>
+        <span class="comment">%  displacement-based,</span>
+        <span class="comment">%  distance-based</span>
+        target_part = obj.goal - obj.position;
+        target_part = target_part/norm(target_part);
+        ft = CONFIG.formation_type;
+        <span class="keyword">switch</span> ft
+        <span class="keyword">case</span> <span class="string">'none'</span> <span class="comment">% goal oriented</span>
+            prefVelocity = obj.maxSpeed*target_part;
+<span class="comment">%             fprintf("%d agent prefV = (%f, %f)\n",obj.id, prefVelocity(1), prefVelocity(2));</span>
+            <span class="keyword">return</span>;
+
+        <span class="keyword">case</span> <span class="string">'position'</span>
+            disp(<span class="string">'no implemented'</span>)
+            <span class="keyword">return</span>;
+
+        <span class="keyword">case</span> <span class="string">'displacement'</span>
+            coff_pos = 8.5;
+            coff_vel = 2;
+
+            adjacant            = CONFIG.adjacantMatrix;
+            opt_displacement    = CONFIG.displacementMatrix(:,:,phase);
+
+            objID = obj.id;
+            num_adj = 0; <span class="comment">% #neighbour</span>
+            nn_idx = [];
+
+            <span class="keyword">for</span> i = 1:length(adjacant(objID,:))
+                <span class="keyword">if</span> adjacant(objID,i) ~= 0
+                    num_adj = num_adj + 1;
+                    nn_idx(end+1) = i;
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            consensus_part = zeros(1,2);
+
+            <span class="keyword">for</span> i = 1:num_adj
+                opt_d = opt_displacement(objID, 2*i-1:2*i);
+                cur_d = CONFIG.agents(nn_idx(i)).position - obj.position;
+                consensus_part = consensus_part +<span class="keyword">...</span>
+                    coff_pos*(cur_d - opt_d) +<span class="keyword">...</span>
+                    coff_vel*(obj.velocity - CONFIG.agents(nn_idx(i)).velocity);
+            <span class="keyword">end</span>
+
+            consensus_part = consensus_part/norm(consensus_part);
+
+            prefVelocity = obj.maxSpeed*(CONFIG.gamma*consensus_part + (1-CONFIG.gamma)*target_part);
+
+            <span class="keyword">return</span>;
+
+        <span class="keyword">case</span> <span class="string">'distance'</span>
+            disp(<span class="string">'Not Implemented.'</span>)
+            <span class="keyword">return</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+
+    methods(Access=private)
+</pre><h2 id="18">collision cone vertex calculation</h2><pre class="codeinput">    <span class="keyword">function</span> [ccLeftUpperBoundVertice,<span class="keyword">...</span>
+            ccRightUpperBoundVertice,<span class="keyword">...</span>
+            ccRightLowerBoundVertice,<span class="keyword">...</span>
+            ccLeftLowerBoundVertice] = helperCalCollisionCone(obj,<span class="keyword">...</span>
+                                                            that,<span class="keyword">...</span>
+                                                            sigmaLength,<span class="keyword">...</span>
+                                                            leftSigma,<span class="keyword">...</span>
+                                                            rightSigma,<span class="keyword">...</span>
+                                                            alpha,<span class="keyword">...</span>
+                                                            tau)
+        <span class="keyword">if</span> nargin == 7
+            tau_prime = tau;
+        <span class="keyword">else</span>
+            tau_prime = obj.tau;
+        <span class="keyword">end</span>
+        tauLength =  ((norm(obj.position - that.position) - obj.radius - that.radius)*cos(alpha))/tau_prime;
+        ccLeftUpperBoundVertice  = [sigmaLength*cos(leftSigma),  sigmaLength*sin(leftSigma)];
+        ccRightUpperBoundVertice = [sigmaLength*cos(rightSigma), sigmaLength*sin(rightSigma)];
+        ccLeftLowerBoundVertice  = [tauLength*cos(leftSigma),    tauLength*sin(leftSigma)];
+        ccRightLowerBoundVertice = [tauLength*cos(rightSigma),   tauLength*sin(rightSigma)];
+    <span class="keyword">end</span>
+</pre><h2 id="19">velMap</h2><pre class="codeinput">    <span class="keyword">function</span> velocityMap = helperCalVelocityMap(obj)
+        <span class="comment">%helperCalVelocityMap - Double Integrator Velocity Map</span>
+        <span class="comment">% velocityMap = helperCalVelocityMap()</span>
+        <span class="comment">% with or without acceleration constraint</span>
+
+        <span class="comment">% with acc</span>
+<span class="comment">%         i = 0:0.01:2*pi;</span>
+<span class="comment">%         rvx = obj.velocity(1) + obj.speedProtectedRatio*obj.acc_abs*cos(i);</span>
+<span class="comment">%         rvy = obj.velocity(2) + obj.speedProtectedRatio*obj.acc_abs*sin(i);</span>
+<span class="comment">%         candidateVel = polyshape([rvx', rvy']);</span>
+<span class="comment">%         vx = obj.maxSpeed*cos(i);</span>
+<span class="comment">%         vy = obj.maxSpeed*sin(i);</span>
+<span class="comment">%         maxVel = polyshape([vx', vy']);</span>
+<span class="comment">%         reachableVel = intersect(candidateVel, maxVel);</span>
+
+        <span class="comment">% without acc</span>
+        i = 0:0.005:2*pi;
+        vx = obj.maxSpeed*cos(i);
+        vy = obj.maxSpeed*sin(i);
+        reachableVel = polyshape([vx', vy']);
+
+        velocityMap = reachableVel.Vertices;
+    <span class="keyword">end</span>
+</pre><h2 id="20">vo calculation</h2><pre class="codeinput">    <span class="keyword">function</span> velocityObstacle = helperCalVelocityObstacle(obj, that, method)
+    <span class="comment">%helperCalVelocityObstacle - calculate VO and RVO for agent</span>
+    <span class="comment">% velocityObstacle = helperCalVelocityObstacle(neighbour, 'VO' or 'RVO')</span>
+
+        <span class="keyword">if</span> strcmp(that.type, <span class="string">"polygon"</span>) == 1
+            <span class="comment">% treat polygon as circles temporarily</span>
+            velocityObstacle = obj.helperCalPolygonAsCircleVelocityObstacle(that, method);
+        <span class="keyword">else</span>
+            coneAlpha = 1;
+            <span class="comment">% To avoid collision, add safe Distance between two agents</span>
+            radiusHat = that.radius + obj.radius + obj.protectZone;
+            posRelativeVector = that.position - obj.position;
+            posDist = norm(posRelativeVector) - obj.dist_epsilon;
+            <span class="comment">% theta ~ [-pi, pi]</span>
+            theta = atan2(posRelativeVector(2), posRelativeVector(1));
+            <span class="comment">% alpha ~ (0, pi/2)</span>
+            alpha = asin(radiusHat/posDist);
+            <span class="comment">% sigma boundary</span>
+            leftSigma = theta+alpha;
+            rightSigma = theta-alpha;
+            <span class="comment">% calculation</span>
+            <span class="comment">% may convert to switch-case style</span>
+            <span class="keyword">if</span> strcmp(method, <span class="string">'VO'</span>) == 1
+                <span class="comment">% velocity obstacle cone length calculation</span>
+                sigmaLength = coneAlpha*(obj.maxSpeed + norm(that.velocity)) / cos(alpha);
+                <span class="comment">% collision cone boundary (left/right sigma)</span>
+                ccLeftBoundVertice = [sigmaLength*cos(leftSigma), sigmaLength*sin(leftSigma)];
+                ccRightBoundVertice = [sigmaLength*cos(rightSigma), sigmaLength*sin(rightSigma)];
+                ccApex = [0,0];
+                <span class="comment">% offset transition vector</span>
+                transitionVector = that.velocity;
+                <span class="comment">% vo cone calculation</span>
+                velocityObstacle = [ccLeftBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccRightBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccApex + transitionVector];
+            <span class="keyword">elseif</span> strcmp(method, <span class="string">'RVO'</span>) == 1
+                <span class="comment">% velocity obstacle cone length calculation</span>
+                sigmaLength = coneAlpha*(obj.maxSpeed + norm(that.velocity + obj.velocity)) / cos(alpha);
+                <span class="comment">% collision cone boundary (left/right sigma)</span>
+                ccLeftBoundVertice = [sigmaLength*cos(leftSigma), sigmaLength*sin(leftSigma)];
+                ccRightBoundVertice = [sigmaLength*cos(rightSigma), sigmaLength*sin(rightSigma)];
+                ccApex = [0,0];
+                <span class="comment">% RVO_alpha ~ [0,1] defines the behavior of agent</span>
+                <span class="comment">% the larger, the more aggressive the agent will be.</span>
+                <span class="comment">% the smaller, the more softer the agent will be.</span>
+                transitionVector = obj.RVO_alpha*(obj.velocity + that.velocity);
+                velocityObstacle = [ccLeftBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccRightBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccApex + transitionVector];
+            <span class="keyword">elseif</span> strcmp(method, <span class="string">'VOT'</span>) == 1
+                <span class="comment">% velocity obstacle cone length calculation</span>
+                sigmaLength = coneAlpha*(obj.maxSpeed + norm(that.velocity)) / cos(alpha);
+                <span class="comment">% truncated velocity obstacle</span>
+                [ccLeftUpperBoundVertice, ccRightUpperBoundVertice,<span class="keyword">...</span>
+                    ccRightLowerBoundVertice, ccLeftLowerBoundVertice] = obj.helperCalCollisionCone(that, sigmaLength, leftSigma, rightSigma, alpha);
+                transitionVector = that.velocity;
+                velocityObstacle = [ccLeftUpperBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccRightUpperBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccRightLowerBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccLeftLowerBoundVertice + transitionVector];
+            <span class="keyword">elseif</span> strcmp(method, <span class="string">'RVOT'</span>) == 1
+                <span class="comment">% velocity obstacle cone length calculation</span>
+                sigmaLength = coneAlpha*(obj.maxSpeed + norm(that.velocity + obj.velocity)) / cos(alpha);
+                <span class="comment">% truncated reciprocal velocity obstacle</span>
+                [ccLeftUpperBoundVertice, ccRightUpperBoundVertice,<span class="keyword">...</span>
+                    ccRightLowerBoundVertice, ccLeftLowerBoundVertice] = obj.helperCalCollisionCone(that, sigmaLength, leftSigma, rightSigma, alpha, 10);
+                transitionVector = obj.RVO_alpha*(obj.velocity + that.velocity);
+                velocityObstacle = [ccLeftUpperBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccRightUpperBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccRightLowerBoundVertice + transitionVector;<span class="keyword">...</span>
+                    ccLeftLowerBoundVertice + transitionVector];
+            <span class="keyword">else</span>
+                error(<span class="string">'VO variant not supported.'</span>)
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">function</span> deadlockVelocity = helperCalDeadlockVelocity(obj)
+        <span class="comment">% deal with the deadlock senario</span>
+        rvalue = 0.9 + 0.2*rand(<span class="string">'double'</span>);
+        deadlockVelocity = -rvalue*obj.velocity;
+<span class="comment">%         deadlockVelocity = [0.0];</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">function</span> vo = helperCalPolygonAsCircleVelocityObstacle(obj, that, method)
+        <span class="comment">%helperCalPolygonAsCircleVelocityObstacle</span>
+        that.radius = sqrt(that.width^2+that.height^2);
+        that.type = <span class="string">'circle'</span>;
+        vo = obj.helperCalVelocityObstacle(that, method);
+    <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><h2 id="22">PLOTTING METHODS</h2><p>plotting functions</p><pre class="codeinput">    methods
+</pre><pre class="codeinput">        <span class="comment">% it should be later extended to much more compatible way.</span>
+        <span class="comment">% add ax variable to be specific in plotting</span>
+</pre><h2 id="24">display function</h2><pre class="codeinput">        <span class="keyword">function</span> [x, y] = show(obj)
+            <span class="keyword">global</span> SELECTED_IDX
+            x = obj.position(1) + obj.radius * cos(0:0.01:2*pi);
+            y = obj.position(2) + obj.radius * sin(0:0.01:2*pi);
+            <span class="keyword">if</span> obj.id == SELECTED_IDX
+                plot(polyshape([x', y']),<span class="keyword">...</span>
+                    <span class="string">'FaceColor'</span>, <span class="string">'#230A59'</span>,<span class="keyword">...</span><span class="comment"> % classic blue - most adborable color in Adobe survey in 2019</span>
+                    <span class="string">'FaceAlpha'</span>, 0.5,<span class="keyword">...</span>
+                    <span class="string">'LineStyle'</span>, <span class="string">'none'</span>);
+            <span class="keyword">else</span>
+                plot(polyshape([x', y']),<span class="keyword">...</span>
+                    <span class="string">'FaceColor'</span>, <span class="string">'blue'</span>,<span class="keyword">...</span>
+                    <span class="string">'FaceAlpha'</span>, 0.7,<span class="keyword">...</span>
+                    <span class="string">'LineStyle'</span>, <span class="string">'none'</span>);
+            <span class="keyword">end</span>
+
+
+            plot([obj.position(1) obj.goal(1)], [obj.position(2) obj.goal(2)], <span class="keyword">...</span>
+                <span class="string">'LineStyle'</span>, <span class="string">'--'</span>,<span class="keyword">...</span>
+                <span class="string">'Marker'</span>, <span class="string">'+'</span>,<span class="keyword">...</span>
+                <span class="string">'Color'</span>, <span class="string">'blue'</span>);
+
+<span class="comment">%             text(obj.position(1),...</span>
+<span class="comment">%                 obj.position(2),...</span>
+<span class="comment">%                 num2str(obj.id), ...</span>
+<span class="comment">%                 'FontSize', 15,...</span>
+<span class="comment">%                 'FontSmoothing', 'on',...</span>
+<span class="comment">%                 'HorizontalAlignment', 'center');</span>
+        <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+ %% class definition file for 'Agent'
+% 
+% Written by Lu, Hong
+% luhong@westlake.edu.cn
+% 
+
+classdef Agent
+    %% PROPERTIES
+    properties
+        position
+        velocity            = [0 0]
+        acceleration        = [0 0]
+        radius
+        goal
+        id
+        deltaT
+        maxSpeed            = 10
+        measurementRadius   = 10
+        distanceToReachGoal = 0.5 % it might be a bug to be fix. Need to be patient when near the goal
+        speedProtectedRatio = 1
+        protectZone         = 0.01
+        RVO_alpha           = 0.5
+        dist_epsilon        = 0.1
+        dist_signal         = 5
+        
+        % coefficiency for truncated VO; the larger the less truncated
+        % space, tau must > 1
+        tau                 = 2
+        type                = 'agent'
+        neighbour
+    end
+    
+    %% CONSTRUTOR (IN LIST CONSTRUCTOR WAY)
+    % construction function
+    methods(Access=public)
+        %%
+        function obj = Agent(varargin)
+            obj.position    = varargin{1};
+            obj.velocity    = varargin{2};
+            obj.radius      = varargin{3};
+            obj.id          = varargin{4};
+            obj.deltaT      = varargin{5};
+            fprintf("[INFO]\t GENERATING NO.%d AGENT\n", obj.id);
+        end
+        
+        %% for different phase purpose
+        function obj = SetGoal(obj, goal)
+            obj.goal = goal;
+        end
+    end
+    
+    %% API FUNCTIONS
+    methods
+        %% find neighbours for the agent
+        function [neighbour, s, minDist] = calNN(obj, config)
+            minDist = intmax;
+            s = 0;
+            for i = 1:length(config.objType)
+                objType = config.objType{i};
+                buffer.(objType)  = [];
+                if isfield(config, objType) == true
+                    listObj = config.(objType);
+                    for j = 1:length(listObj)
+                        dist = norm(obj.position - listObj(j).position);
+                        if dist < minDist && dist ~= 0
+                            minDist = dist;
+                        end
+                        if dist > obj.measurementRadius || dist == 0
+                            continue
+                        end
+                        buffer.(objType) = [buffer.(objType) listObj(j)];
+                    end
+                end
+                neighbour.(objType) = buffer.(objType);
+            end
+        end
+        
+%         function [neighbour, s, minDist] = calNeighbourUsingKdtree(obj, config)
+%             
+%         end
+        
+        %% get all velocity obstacles
+        function allVO = calVO(obj, nnp, patMethod, nno, obsMethod, nnpoly, polyMethod)
+            % calculate velocity obstacle for every agent
+            % we did not use nargin method to deal with default inputs 
+
+            allVO = [];
+            if ~isempty(nnp)
+                for i = 1:size(nnp,2) 
+                    allVO = [allVO obj.helperCalVelocityObstacle(nnp(i), patMethod)];
+                end
+            end
+            if ~isempty(nno)
+                for i = 1:size(nno,2) 
+                    allVO = [allVO obj.helperCalVelocityObstacle(nno(i), obsMethod)];
+                end
+            end
+            if ~isempty(nnpoly)
+                for i = 1:size(nnpoly,2) 
+                    allVO = [allVO obj.helperCalVelocityObstacle(nnpoly(i), polyMethod)];
+                end
+            end
+        end
+        
+        %%
+        
+        function flag = isReachGoal(obj)
+            persistent print
+            print = false;
+            if sum((obj.position - obj.goal).^2) < obj.distanceToReachGoal^2
+                flag = true;
+                if ~print, fprintf("[INFO]\t AGENT %d REACHED GOAL\n", obj.id); end
+                print = true;
+            else
+                flag = false;    
+            end
+        end
+        
+        function obj = update(obj, optVelocity)
+            % update States for agent
+            % position, acceleration, velocity in deltaT
+            obj.position = obj.position + optVelocity*obj.deltaT;
+            obj.acceleration = optVelocity - obj.velocity;
+            obj.velocity = optVelocity;
+        end
+        
+        
+        %% get optimal velocity for the agent
+        function [optimalVelocity, prefVelocity]= calOptVel(obj, vo, CONFIG, phase)
+            global SHOW_SINGLE_AGENT_VO 
+            global SHOW_SINGLE_AGENT_VP 
+            global SHOW_ALL_AGENT_VELOCITY 
+            global PlotWhileSim 
+            global SELECTED_IDX
+            
+            optimalVelocity = zeros(1,2);
+            
+            if obj.isReachGoal()
+                if ~isempty(vo), fprintf("AGENT %d REACHED GOAL, BUT STILL GOT VO\n", obj.id); end
+                % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+                % need to be dynamic, TODO 
+                % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+            elseif ~isreal(vo)
+                optimalVelocity = obj.helperCalDeadlockVelocity();
+            else
+                vel_epsilon_filter = 0.1;
+                prefVelocity = obj.helperCalPrefVelocity(CONFIG, phase);
+                velocityMap = obj.helperCalVelocityMap();
+                voCount = size(vo,2)/2;
+                % using polyshape() to do geometry calculation
+                velocityMapPgon = polyshape(velocityMap);
+                for i = 1:voCount
+                    vo_idx = 2*(i-1) + 1;
+                    voPgon = polyshape(vo(:, vo_idx:vo_idx+1));
+                    velocityMapPgon = subtract(velocityMapPgon, voPgon);
+                    if SHOW_SINGLE_AGENT_VO == true && obj.id == SELECTED_IDX && PlotWhileSim == true
+                        voPgon4show = polyshape(obj.position + vo(:, vo_idx:vo_idx+1));
+                        plot(voPgon4show,...
+                            'FaceColor', 'blue',...
+                            'FaceAlpha', 0.1,...
+                            'EdgeColor', 'none');
+                    end
+                end
+                % select reachable velocity
+                reachableVelocityMap = velocityMapPgon.Vertices;
+                % plot reachable velocity map for visualizations
+                if SHOW_SINGLE_AGENT_VP == true && obj.id == SELECTED_IDX && PlotWhileSim == true
+                    plot(polyshape(reachableVelocityMap + obj.position), ...
+                            'FaceColor', 'blue',...
+                            'FaceAlpha', 0.1); 
+                end
+                % argmin |Vi - Vpref|_2
+                n_reachableVelocity = size(reachableVelocityMap, 1);
+                dist_min = intmax;
+                if n_reachableVelocity ~= 0
+                    for i = 1:n_reachableVelocity
+                       candidate = reachableVelocityMap(i,:);
+                       if norm(candidate) < vel_epsilon_filter*obj.maxSpeed
+                           continue
+                       end
+                       if norm(candidate-prefVelocity) < dist_min
+                           dist_min = norm(candidate-prefVelocity);
+                           optimalVelocity = candidate;
+                       end
+                    end
+                end
+                % add perturbation to break symmetry
+                angle = rand*2.0*pi; 
+                dist =  rand*0.05;
+                optimalVelocity = optimalVelocity + dist*[cos(angle), sin(angle)];
+                % plot while simulation
+                if SHOW_ALL_AGENT_VELOCITY == true && PlotWhileSim == true
+                    nxtpos = obj.position + optimalVelocity;
+                    plot([nxtpos(1), obj.position(1)],...
+                        [nxtpos(2), obj.position(2)],...
+                        'b-');
+                end
+            end  
+        end
+        
+
+    end
+    
+    %% PRIVATE METHODS
+    methods(Access = private)
+%   >>>>>>>>>>>>>>>>>>>   PRIVATE HELPER FUNCTIONS   <<<<<<<<<<<<<<<<<<<<<
+    %% prefVel
+    function prefVelocity = helperCalPrefVelocity(obj, CONFIG, phase)
+        %helperCalPrefVelocity - calculate preferrenced velocity in
+        %goal-oriented
+        % &
+        %consensus-based formation in 3 types
+        %  position-based, 
+        %  displacement-based, 
+        %  distance-based
+        target_part = obj.goal - obj.position;
+        target_part = target_part/norm(target_part);
+        ft = CONFIG.formation_type;
+        switch ft
+        case 'none' % goal oriented
+            prefVelocity = obj.maxSpeed*target_part;
+%             fprintf("%d agent prefV = (%f, %f)\n",obj.id, prefVelocity(1), prefVelocity(2));
+            return;
+
+        case 'position'
+            disp('no implemented')
+            return;
+
+        case 'displacement'
+            coff_pos = 8.5;
+            coff_vel = 2;
+            
+            adjacant            = CONFIG.adjacantMatrix;
+            opt_displacement    = CONFIG.displacementMatrix(:,:,phase);
+            
+            objID = obj.id;
+            num_adj = 0; % #neighbour
+            nn_idx = [];
+            
+            for i = 1:length(adjacant(objID,:))
+                if adjacant(objID,i) ~= 0
+                    num_adj = num_adj + 1;
+                    nn_idx(end+1) = i;
+                end
+            end
+
+            consensus_part = zeros(1,2);
+
+            for i = 1:num_adj
+                opt_d = opt_displacement(objID, 2*i-1:2*i);
+                cur_d = CONFIG.agents(nn_idx(i)).position - obj.position;
+                consensus_part = consensus_part +...
+                    coff_pos*(cur_d - opt_d) +...
+                    coff_vel*(obj.velocity - CONFIG.agents(nn_idx(i)).velocity);
+            end
+
+            consensus_part = consensus_part/norm(consensus_part);
+            
+            prefVelocity = obj.maxSpeed*(CONFIG.gamma*consensus_part + (1-CONFIG.gamma)*target_part);
+            
+            return;
+
+        case 'distance'
+            disp('Not Implemented.')
+            return;
+        end
+    end	
+    
+    end
+    
+    methods(Access=private)
+    
+    %% collision cone vertex calculation
+    function [ccLeftUpperBoundVertice,...
+            ccRightUpperBoundVertice,...
+            ccRightLowerBoundVertice,...
+            ccLeftLowerBoundVertice] = helperCalCollisionCone(obj,... 
+                                                            that,...
+                                                            sigmaLength,...
+                                                            leftSigma,...
+                                                            rightSigma,...
+                                                            alpha,...
+                                                            tau)
+        if nargin == 7
+            tau_prime = tau;
+        else
+            tau_prime = obj.tau;
+        end
+        tauLength =  ((norm(obj.position - that.position) - obj.radius - that.radius)*cos(alpha))/tau_prime;
+        ccLeftUpperBoundVertice  = [sigmaLength*cos(leftSigma),  sigmaLength*sin(leftSigma)];
+        ccRightUpperBoundVertice = [sigmaLength*cos(rightSigma), sigmaLength*sin(rightSigma)];
+        ccLeftLowerBoundVertice  = [tauLength*cos(leftSigma),    tauLength*sin(leftSigma)];
+        ccRightLowerBoundVertice = [tauLength*cos(rightSigma),   tauLength*sin(rightSigma)];
+    end
+    
+    %% velMap
+    function velocityMap = helperCalVelocityMap(obj)
+        %helperCalVelocityMap - Double Integrator Velocity Map
+        % velocityMap = helperCalVelocityMap()
+        % with or without acceleration constraint
+        
+        % with acc
+%         i = 0:0.01:2*pi;
+%         rvx = obj.velocity(1) + obj.speedProtectedRatio*obj.acc_abs*cos(i);
+%         rvy = obj.velocity(2) + obj.speedProtectedRatio*obj.acc_abs*sin(i);
+%         candidateVel = polyshape([rvx', rvy']);
+%         vx = obj.maxSpeed*cos(i);
+%         vy = obj.maxSpeed*sin(i);
+%         maxVel = polyshape([vx', vy']);
+%         reachableVel = intersect(candidateVel, maxVel);
+        
+        % without acc
+        i = 0:0.005:2*pi;
+        vx = obj.maxSpeed*cos(i);
+        vy = obj.maxSpeed*sin(i);
+        reachableVel = polyshape([vx', vy']);
+        
+        velocityMap = reachableVel.Vertices;
+    end
+    
+    %% vo calculation
+    function velocityObstacle = helperCalVelocityObstacle(obj, that, method)
+    %helperCalVelocityObstacle - calculate VO and RVO for agent
+    % velocityObstacle = helperCalVelocityObstacle(neighbour, 'VO' or 'RVO')
+
+        if strcmp(that.type, "polygon") == 1
+            % treat polygon as circles temporarily
+            velocityObstacle = obj.helperCalPolygonAsCircleVelocityObstacle(that, method);
+        else
+            coneAlpha = 1;
+            % To avoid collision, add safe Distance between two agents
+            radiusHat = that.radius + obj.radius + obj.protectZone;
+            posRelativeVector = that.position - obj.position;
+            posDist = norm(posRelativeVector) - obj.dist_epsilon;
+            % theta ~ [-pi, pi]
+            theta = atan2(posRelativeVector(2), posRelativeVector(1));
+            % alpha ~ (0, pi/2)
+            alpha = asin(radiusHat/posDist);
+            % sigma boundary
+            leftSigma = theta+alpha;  
+            rightSigma = theta-alpha;
+            % calculation
+            % may convert to switch-case style
+            if strcmp(method, 'VO') == 1
+                % velocity obstacle cone length calculation
+                sigmaLength = coneAlpha*(obj.maxSpeed + norm(that.velocity)) / cos(alpha);
+                % collision cone boundary (left/right sigma)
+                ccLeftBoundVertice = [sigmaLength*cos(leftSigma), sigmaLength*sin(leftSigma)];
+                ccRightBoundVertice = [sigmaLength*cos(rightSigma), sigmaLength*sin(rightSigma)];
+                ccApex = [0,0];
+                % offset transition vector
+                transitionVector = that.velocity;
+                % vo cone calculation
+                velocityObstacle = [ccLeftBoundVertice + transitionVector;...
+                    ccRightBoundVertice + transitionVector;...
+                    ccApex + transitionVector];
+            elseif strcmp(method, 'RVO') == 1
+                % velocity obstacle cone length calculation
+                sigmaLength = coneAlpha*(obj.maxSpeed + norm(that.velocity + obj.velocity)) / cos(alpha);
+                % collision cone boundary (left/right sigma)
+                ccLeftBoundVertice = [sigmaLength*cos(leftSigma), sigmaLength*sin(leftSigma)];
+                ccRightBoundVertice = [sigmaLength*cos(rightSigma), sigmaLength*sin(rightSigma)];
+                ccApex = [0,0]; 
+                % RVO_alpha ~ [0,1] defines the behavior of agent
+                % the larger, the more aggressive the agent will be.
+                % the smaller, the more softer the agent will be.
+                transitionVector = obj.RVO_alpha*(obj.velocity + that.velocity);
+                velocityObstacle = [ccLeftBoundVertice + transitionVector;...
+                    ccRightBoundVertice + transitionVector;...
+                    ccApex + transitionVector];
+            elseif strcmp(method, 'VOT') == 1
+                % velocity obstacle cone length calculation
+                sigmaLength = coneAlpha*(obj.maxSpeed + norm(that.velocity)) / cos(alpha);
+                % truncated velocity obstacle
+                [ccLeftUpperBoundVertice, ccRightUpperBoundVertice,...
+                    ccRightLowerBoundVertice, ccLeftLowerBoundVertice] = obj.helperCalCollisionCone(that, sigmaLength, leftSigma, rightSigma, alpha);
+                transitionVector = that.velocity;
+                velocityObstacle = [ccLeftUpperBoundVertice + transitionVector;...
+                    ccRightUpperBoundVertice + transitionVector;...
+                    ccRightLowerBoundVertice + transitionVector;...
+                    ccLeftLowerBoundVertice + transitionVector];
+            elseif strcmp(method, 'RVOT') == 1
+                % velocity obstacle cone length calculation
+                sigmaLength = coneAlpha*(obj.maxSpeed + norm(that.velocity + obj.velocity)) / cos(alpha);
+                % truncated reciprocal velocity obstacle
+                [ccLeftUpperBoundVertice, ccRightUpperBoundVertice,...
+                    ccRightLowerBoundVertice, ccLeftLowerBoundVertice] = obj.helperCalCollisionCone(that, sigmaLength, leftSigma, rightSigma, alpha, 10);
+                transitionVector = obj.RVO_alpha*(obj.velocity + that.velocity);
+                velocityObstacle = [ccLeftUpperBoundVertice + transitionVector;...
+                    ccRightUpperBoundVertice + transitionVector;...
+                    ccRightLowerBoundVertice + transitionVector;...
+                    ccLeftLowerBoundVertice + transitionVector];
+            else
+                error('VO variant not supported.')
+            end
+        end
+    end 
+    
+    function deadlockVelocity = helperCalDeadlockVelocity(obj)
+        % deal with the deadlock senario
+        rvalue = 0.9 + 0.2*rand('double');
+        deadlockVelocity = -rvalue*obj.velocity;
+%         deadlockVelocity = [0.0];
+    end
+    
+    function vo = helperCalPolygonAsCircleVelocityObstacle(obj, that, method)
+        %helperCalPolygonAsCircleVelocityObstacle
+        that.radius = sqrt(that.width^2+that.height^2);
+        that.type = 'circle';
+        vo = obj.helperCalVelocityObstacle(that, method);
+    end
+
+    end
+    
+    
+    %% PLOTTING METHODS   
+    % plotting functions
+    methods
+        % it should be later extended to much more compatible way.
+        % add ax variable to be specific in plotting
+        %% display function
+        function [x, y] = show(obj)
+            global SELECTED_IDX
+            x = obj.position(1) + obj.radius * cos(0:0.01:2*pi);
+            y = obj.position(2) + obj.radius * sin(0:0.01:2*pi);
+            if obj.id == SELECTED_IDX
+                plot(polyshape([x', y']),...
+                    'FaceColor', '#230A59',... % classic blue - most adborable color in Adobe survey in 2019
+                    'FaceAlpha', 0.5,...
+                    'LineStyle', 'none');
+            else
+                plot(polyshape([x', y']),...
+                    'FaceColor', 'blue',...
+                    'FaceAlpha', 0.7,...
+                    'LineStyle', 'none');
+            end
+            
+            
+            plot([obj.position(1) obj.goal(1)], [obj.position(2) obj.goal(2)], ...
+                'LineStyle', 'REPLACE_WITH_DASH_DASH',...
+                'Marker', '+',...
+                'Color', 'blue');
+            
+%             text(obj.position(1),...
+%                 obj.position(2),...
+%                 num2str(obj.id), ...
+%                 'FontSize', 15,...
+%                 'FontSmoothing', 'on',...
+%                 'HorizontalAlignment', 'center');
+        end
+    end
+    
+end
+##### SOURCE END #####
+--></body></html>

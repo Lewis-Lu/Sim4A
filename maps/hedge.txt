@@ -1,0 +1,8 @@
+---boundary---
+boundary -20.0 20.0 -10.0 10.0
+
+---CircleBlock posx posy velx vely radius---
+
+---Agent posx posy velx vely radius goalx goaly---
+agent -10.0 0.0 0.0 0.0 1 10.0 0.0
+agent 10.0 0.0 0.0 0.0 1 -10.0 0.0
