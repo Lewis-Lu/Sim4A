@@ -19,14 +19,20 @@ For questions regarding the project, drop me by email at: luhong@westlake.edu or
 
 ## Structure
 
-<img src="assets/structure.png" style="zoom:50%;" />
+<div align="center">
+    <img src="assets/structure.png" width="600" />
+</div>
 
-- Vertically, the simulator configuration is initialized by maps outside according to certain regulations.
-- Horizontally,
+
+
+- Vertically, the simulator configuration is initialized by maps outside according to certain predefined regulation. Map initialization has been shown in [Map Initialization](#map-initialization).
+- Horizontally, the framework has various types of plug-in usages through MATLAB tools. Framework can use .MEX files to load RVO2 library for some certain purposes. CoppeliaSim Simulator remote-API has also been wrapped.
 
 ### Map Initialization
 
-<img src="assets/envInit.png" alt="init" style="zoom:60%;" />
+<div align=center>
+    <img src="assets/envInit.png" alt="init" width="375" />
+</div>
 
 ### Outlier APIs wrapper
 
@@ -36,19 +42,13 @@ For questions regarding the project, drop me by email at: luhong@westlake.edu or
 
 ### Random Searcher
 
-## TO-DO Log
-
 ## Slices
 
-<img src="assets/single.gif" alt="single" style="zoom:67%;" />
-
-<img src="assets/single2.gif" style="zoom:67%;" />
-
-<img src="assets/circle.gif" style="zoom:67%;" />
-
-<img src="assets/giveTheWay.gif" style="zoom:67%;" />
-
-<img src="assets/easyWU.gif" style="zoom:67%;" />
+<div>
+    <img src="assets/single.gif" alt="single" width="375" /><img src="assets/single2.gif" width="375" />
+    <img src="assets/circle.gif" width="375" /><img src="assets/giveTheWay.gif" width="375" />
+    <img src="assets/easyWU.gif" width="375" />
+</div>
 
 ## Reference
 
