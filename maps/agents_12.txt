@@ -1,5 +1,0 @@
----boundary---
-boundary -30.0 70.0 -25.0 25.0
-
-mode random
-quantity 12

@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/leiws/Westlake/RVO2/examples/Circle.cpp
+cmath
+-
+cstddef
+-
+vector
+-
+iostream
+-
+omp.h
+-
+RVO.h
+-
+
+src/RVO.h
+RVOSimulator.h
+src/RVOSimulator.h
+Vector2.h
+src/Vector2.h
+RVO.h
+-
+
+src/RVOSimulator.h
+cstddef
+-
+limits
+-
+vector
+-
+Vector2.h
+src/Vector2.h
+
+src/Vector2.h
+cmath
+-
+ostream
+-
+
