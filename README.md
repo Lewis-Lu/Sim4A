@@ -27,11 +27,12 @@ For questions regarding the project, drop me lines by email at: luhong@westlake.
 ## Structure
 
 <div align="center">
-    <img src="assets/structure.png" width="900" />
+    <img src="src/assets/structure.png" width="900" />
     <p>
         General structure of the simulator
     </p>
 </div>
+
 
 
 
@@ -42,9 +43,10 @@ For questions regarding the project, drop me lines by email at: luhong@westlake.
 ### Map Initialization
 
 <div align=center>
-    <img src="assets/envInit.png" alt="init" width="350" height="500" />
+    <img src="src/assets/envInit.png" alt="init" width="350" height="500" />
     <p>Map initialization process in "util/loadMap.m"</p>
 </div>
+
 
 There are several self-defined keywords for map configuration:
 
@@ -77,11 +79,12 @@ See "maps/example_absolute.txt", "maps/example_absolute_formation.txt", "maps/ex
 MEX is implemented for using RVO2 library written by [UNC](gamma.cs.unc.edu/RVO2/), detailed description is illustrated in *"doc/mex.pdf"* and *"doc/MATLAB_Cplusplus.md"*. Code is at *"RVO2/rvoGen"* folder which includes MEX generation script and CPP file for using RVO2 lib through MEX interface.
 
 <div style="text-align:center">
-    <img src="video/rvoGenCircleSenario.gif" width="500">
+    <img src="src/video/rvoGenCircleSenario.gif" width="500">
     <p>
         Circle senario using RVO2 C++ LIB through MEX, shown in MATLAB
     </p>
 </div>
+
 
 To use RVO2 library, you should figure out the parameters' meanings. 
 
@@ -98,19 +101,21 @@ regulates the agent's behavior like maximum numbers of neighbors and maximum vel
 CoppeliaSim remote API is used in *"@Vrep"* folder. It is a custom wrapper for our simulation of differential drive robot. Current functions can be seen in [here](#Vrep).
 
 <div>
-    <video src="video/noObsVrep.mp4"></video>
+    <video src="src/video/noObsVrep.mp4"></video>
     <p style="text-align:center">
         CoppeliaSim
     </p>
 </div>
 
 
+
 <div>
-    <video src="video/threeObsVrep.mp4"></video>
+    <video src="src/video/threeObsVrep.mp4"></video>
 	<p style="text-align:center">
         Simulation of [2] in CoppeliaSim
     </p>
 </div>
+
 How to do so, please check at **CoppeliaSim Helper File Website**.
 
 
@@ -186,8 +191,9 @@ How to do so, please check at **CoppeliaSim Helper File Website**.
 The reason we want to learn the local map (or the local sensed information), is to better navigate locally under the global guidance. What we want to achieve is as follows (this demo did not preserve a persistent search tree based on trigger, just for illustration):
 
 <div>
-    <img src="assets/localMinima.gif" width=375>
+    <img src="src/assets/localMinima.gif" width=375>
 </div>
+
 
 Then, how to recognize (when to trigger) the local dead-end becomes a problem, which lead us to local map learning.
 
@@ -212,7 +218,7 @@ layers = [
     classificationLayer("Name","classoutput")];
 ```
 
-![](assets/nnet.png)
+![](src/assets/nnet.png)
 
 This network deals with local cost map, to address local-minimum problem during the navigation of the robot. Using vehicle-ego local cost map, a convolution encoder is adopted for representing the local map in the latent space for training. 
 
@@ -237,26 +243,28 @@ imds = imageDatastore(digitDatasetPath, ...
 Training process is shown below. 
 
 <div>
-    <img src="assets/accuracy.png">
+    <img src="src/assets/accuracy.png">
 	<p style="text-align:center;">
     	Learning accuracy over iterations
     </p>
 </div>
 
 <div>
-    <img src="assets/lost.png">
+    <img src="src/assets/lost.png">
 	<p style="text-align:center;">
     	Loss over iterations
     </p>
 </div>
 
+
 ## Slices
 
 <div>
-    <img src="assets/single.gif" alt="single" width="375" /><img src="assets/single2.gif" width="375" />
-    <img src="assets/circle.gif" width="375" /><img src="assets/giveTheWay.gif" width="375" />
-    <img src="assets/easyWU.gif" width="375" />  <img src="assets/singleSparse.gif" width="375" /> 
+    <img src="src/assets/single.gif" alt="single" width="375" /><img src="src/assets/single2.gif" width="375" />
+    <img src="src/assets/circle.gif" width="375" /><img src="src/assets/giveTheWay.gif" width="375" />
+    <img src="src/assets/easyWU.gif" width="375" />  <img src="src/assets/singleSparse.gif" width="375" /> 
 </div>
+
 
 
 
